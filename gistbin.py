@@ -1,31 +1,29 @@
-import sys
+import argparse
 import json
 import os
+import sys
 from io import BytesIO
-from lib import safe_list_get, create_gist
+
+from lib import create_gist, create_auth
 
 if __name__=='__main__':
-    if safe_list_get(sys.argv, 1) == 'login':
+    # args stuff
+    parser = argparse.ArgumentParser(description="A commandline tool for GitHub Gists.")
+    parser.add_argument('name', action='store_const', const='name', help='Gives your gist a name. Default is random.')
+    parser.add_argument('-v', '--verbose', action='store_true', help='Enables verbose output.')
+    parser.add_argument('desc', action='store_const', const='desc', help='Gives your gist a description.')
+    parser.add_argument('--login', action='store_true', help='Login to GitHub Gists.')
+    parser.add_argument('-p', '--private', action='store_false', help='Sets your Gist to private so only those with the link can see.')
+    args = parser.parse_args()
+
+    if args.login:
+        username = input("Enter GitHub username: ").rstrip()
         key = input("Enter GitHub access token: ").rstrip()
-        keyfile_dir = os.path.join(os.environ.get("HOME"), ".gistbin")
-        keyfile_path = os.path.join(keyfile_dir, 'auth.json')
-        while True:
-            if os.path.exists(keyfile_dir):
-                with open(keyfile_path, 'w') as keyfile:
-                    data = {
-                        'key':key
-                    }
-                    keyfile.write(json.dumps(data))
-                break
-            else:
-                os.mkdir(keyfile_dir)
+        create_auth(username, key)
         print("Keyfile saved.")
     else:
-        file_buffer = BytesIO()
-        lines = []
+        file_string = ''
         for line in sys.stdin:
-            lines += [line]
-        with open(file_buffer, 'w') as input_file:
-            for line in lines:
-                input_file.write(line)
-        create_gist(file_buffer)
+            file_string += line + '\n'
+        
+        create_gist(file_string, name=args.name, desc=args.desc, public=args.private, verbose=args.verbose)
