@@ -7,7 +7,9 @@ Github Gist client allowing for quick uploads via commandline!
 
 Via pip: 
 
-`pip3 install gistbin`
+```
+pip3 install gistbin
+```
 
 Manually:
 
