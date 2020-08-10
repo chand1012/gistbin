@@ -39,15 +39,18 @@ def create_gist(file_string, name=None, desc=None, public=True, verbose=False):
     url = 'https://api.github.com/gists'
     if name is None:
         rw = RandomWords()
-        name = ''.join(rw.random_words(count=3)) + '.txt'
+        name = '_'.join(rw.random_words(count=3)) + '.txt'
     if desc is None:
         desc = ''
+
+    if verbose:
+        print(name)
+        print(desc)
+    
     body = {
         'public': public,
         'files': {}
     }
-    if verbose:
-        print(name)
     body['description'] = desc
     body['files'][name] = {'content': file_string}
 

@@ -1,17 +1,16 @@
-import argparse
-import json
-import os
-import sys
-from io import BytesIO
+#!/usr/bin/env python3
 
-from lib import create_gist, create_auth
+import argparse
+import sys
+
+from gistbin.lib import create_gist, create_auth
 
 if __name__=='__main__':
     # args stuff
     parser = argparse.ArgumentParser(description="A commandline tool for GitHub Gists.")
-    parser.add_argument('name', action='store_const', const='name', help='Gives your gist a name. Default is random.')
+    parser.add_argument('-n', '--name', action='store', help='Gives your gist a name. Input as a string. Default is random.')
     parser.add_argument('-v', '--verbose', action='store_true', help='Enables verbose output.')
-    parser.add_argument('desc', action='store_const', const='desc', help='Gives your gist a description.')
+    parser.add_argument('-d', '--desc', action='store', help='Gives your gist a description. Input as a string.')
     parser.add_argument('--login', action='store_true', help='Login to GitHub Gists.')
     parser.add_argument('-p', '--private', action='store_false', help='Sets your Gist to private so only those with the link can see.')
     args = parser.parse_args()
