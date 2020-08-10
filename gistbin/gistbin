@@ -14,6 +14,7 @@ if __name__=='__main__':
     parser.add_argument('--login', action='store_true', help='Login to GitHub Gists.')
     parser.add_argument('-p', '--private', action='store_false', help='Sets your Gist to private so only those with the link can see.')
     parser.add_argument('-r', '--raw', action='store_true', help='Makes Gistbin return the raw URL instead of the HTML URL of the file.')
+    parser.add_argument('-f', '--file', action='store', help='Gives Gistbin a file to upload')
     args = parser.parse_args()
 
     if args.login:
@@ -21,9 +22,20 @@ if __name__=='__main__':
         key = input("Enter GitHub access token: ").rstrip()
         create_auth(username, key)
         print("Keyfile saved.")
-    else:
+    elif ('linux' in sys.platform or 'darwin' in sys.platform) and args.file is None:
         file_string = ''
         for line in sys.stdin:
             file_string += line 
+        
+        create_gist(file_string, name=args.name, desc=args.desc, public=args.private, verbose=args.verbose, raw=args.raw)
+    else:
+        
+        if args.file is None:
+            print("This platform does not support piping in text from stdin, so you must use a file. Use the '-f' or '--file' flag followed by a path to do this.")
+            sys.exit(1)
+
+        file_string = ''
+        with open(args.file) as inFile:
+            file_string = inFile.read()
         
         create_gist(file_string, name=args.name, desc=args.desc, public=args.private, verbose=args.verbose, raw=args.raw)
