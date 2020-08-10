@@ -59,14 +59,16 @@ def create_gist(file_string, name=None, desc=None, public=True, verbose=False):
 
     session = requests.Session()
     username, token = get_auth()
+    
     session.auth = (username, token)
-    session.headers = {'accept':'application/vnd.github.v3+json', 'User-Agent':'Gistbin Python Application'}
+    session.headers = {'accept':'application/vnd.github.v3+json', 'User-Agent':'Gistbin'}
 
-    response = session.post(url, data=json.dumps(body)).text
+    response = session.post(url, json=body).json()
+
     if verbose:
         print('Github Response:')
         print(response)
-    response = json.loads(response)
+
     gist_id = response.get('id')
 
     print(f'https://gist.github.com/{username}/{gist_id}')
