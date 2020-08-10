@@ -33,7 +33,7 @@ def get_auth():
         auth = json.loads(keyfile.read())
     return auth.get('username'), auth.get('key')
 
-def create_gist(file_string, name=None, desc=None, public=True, verbose=False):
+def create_gist(file_string, name=None, desc=None, public=True, verbose=False, raw=False):
     # this will create a gist
     # and print out the url
     url = 'https://api.github.com/gists'
@@ -69,7 +69,9 @@ def create_gist(file_string, name=None, desc=None, public=True, verbose=False):
         print('Github Response:')
         print(response)
 
-    gist_id = response.get('id')
-
-    print(f'https://gist.github.com/{username}/{gist_id}')
+    if raw:
+        print(response['files'][name].get('raw_url'))
+    else:
+        gist_id = response.get('id')
+        print(f'https://gist.github.com/{username}/{gist_id}')
 
