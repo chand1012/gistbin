@@ -13,7 +13,7 @@ if __name__=='__main__':
     parser.add_argument('-d', '--desc', action='store', help='Gives your gist a description. Input as a string.')
     parser.add_argument('--login', action='store_true', help='Login to GitHub Gists.')
     parser.add_argument('-p', '--private', action='store_false', help='Sets your Gist to private so only those with the link can see.')
-    parser.add_argument('-R', '--raw', action='store_true', help='Makes Gistbin return the raw URL instead of the HTML url of the file.')
+    parser.add_argument('-r', '--raw', action='store_true', help='Makes Gistbin return the raw URL instead of the HTML URL of the file.')
     args = parser.parse_args()
 
     if args.login:
@@ -24,6 +24,6 @@ if __name__=='__main__':
     else:
         file_string = ''
         for line in sys.stdin:
-            file_string += line + '\n'
+            file_string += line 
         
         create_gist(file_string, name=args.name, desc=args.desc, public=args.private, verbose=args.verbose, raw=args.raw)
