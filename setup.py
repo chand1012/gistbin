@@ -5,7 +5,7 @@ with open('README.md') as readme:
 
 setuptools.setup(
     name='gistbin',
-    version='0.1.2',
+    version='0.2.0',
     author="Chandler Lofland (chand1012)",
     author_email='business@chand1012.net',
     description='Github Gist client allowing for quick uploads via commandline.',

@@ -54,3 +54,38 @@ octocat@octoserv:~$ cat private.txt | gistbin -n "private.txt" -p
 https://gist.github.com/octocat/thisissecret
 ```
 
+If you want to get the raw url for the uploaded file, such as if you want to then download the file immediately onto another machine, you can pass the `-r` or `--raw` argument.
+
+```
+octocat@octoserv:~$ cat git-author-rewrite.sh | gistbin -n "git-author-rewrite.sh" -r
+https://gist.githubusercontent.com/octocat/0831f3fbd83ac4d46451/raw/c197afe3e9ea2e4218f9fccbc0f36d2b8fd3c1e3/git-author-rewrite.sh
+```
+
+You can also get the instructions for all of these commands with the help flag:
+
+```
+octocat@octoserv:~$ gistbin -h
+usage: gistbin [-h] [-n NAME] [-v] [-d DESC] [--login] [-p] [-r]
+
+A commandline tool for GitHub Gists.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -n NAME, --name NAME  Gives your gist a name. Input as a string. Default is
+                        random.
+  -v, --verbose         Enables verbose output.
+  -d DESC, --desc DESC  Gives your gist a description. Input as a string.
+  --login               Login to GitHub Gists.
+  -p, --private         Sets your Gist to private so only those with the link
+                        can see.
+  -r, --raw             Makes Gistbin return the raw URL instead of the HTML
+                        URL of the file.
+```
+
+Gistbin doesn't just work with `cat` you can pipe any terminal output (that ends) into it! For example, if you wanted to list all the files in a directory, you could use `ls -1 | gistbin -n "filelist.txt"`. If you wanted to get all the logs from yesterday from the journal, you could run `journalctl --since yesterday | gistbin -n "yesterday-today-journal.log"`. The possibilities are endless!
+
+## Roadmap
+
+- Windows Support.
+- Multi-file uploads.
+- Some more stuff probably.
