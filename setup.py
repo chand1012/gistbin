@@ -19,5 +19,9 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     python_requires='>=3.6',
+    install_requires=[
+        'requests>=2.24.0',
+        'RandomWords>=0.3.0'
+    ],
     scripts=['gistbin/gistbin']
 )
