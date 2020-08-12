@@ -75,3 +75,37 @@ def create_gist(file_string, name=None, desc=None, public=True, verbose=False, r
         gist_id = response.get('id')
         print(f'https://gist.github.com/{username}/{gist_id}')
 
+
+def create_multi_gist(file_dict, desc=None, public=True, verbose=False):
+    url = 'https://api.github.com/gists'
+
+    if desc is None:
+        desc = ''
+
+    if verbose:
+        print(file_dict)
+        print(desc)
+    
+    body = {
+        'public': public,
+        'desc': desc,
+        'files': file_dict
+    }
+
+    if verbose:
+        print(f'Post request body: {body}')
+    
+    session = requests.Session()
+    username, token = get_auth()
+    
+    session.auth = (username, token)
+    session.headers = {'accept':'application/vnd.github.v3+json', 'User-Agent':'Gistbin'}
+
+    response = session.post(url, json=body).json()
+
+    if verbose:
+        print('Github Response:')
+        print(response)
+    
+    gist_id = response.get('id')
+    print(f'https://gist.github.com/{username}/{gist_id}')
