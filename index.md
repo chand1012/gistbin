@@ -1,4 +1,3 @@
-# GistBin
 [![](https://img.shields.io/pypi/l/gistbin)](https://pypi.org/project/gistbin/) [![](https://img.shields.io/pypi/pyversions/gistbin)](https://pypi.org/project/gistbin/) ![Upload Python Package](https://github.com/chand1012/gistbin/workflows/Upload%20Python%20Package/badge.svg)
 
 Github Gist client allowing for quick uploads via commandline!
