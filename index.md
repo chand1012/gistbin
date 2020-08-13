@@ -1,7 +1,7 @@
 # GistBin
-Github Gist client allowing for quick uploads via commandline!
+[![](https://img.shields.io/pypi/l/gistbin)](https://pypi.org/project/gistbin/) [![](https://img.shields.io/pypi/pyversions/gistbin)](https://pypi.org/project/gistbin/) ![Upload Python Package](https://github.com/chand1012/gistbin/workflows/Upload%20Python%20Package/badge.svg)
 
-<sub>Currently only *nix OSes are supported </sub>
+Github Gist client allowing for quick uploads via commandline!
 
 ## Installing
 
@@ -18,6 +18,8 @@ git clone https://github.com/chand1012/gistbin.git
 cd gistbin
 pip install .
 ```
+
+**[View Source](https://github.com/chand1012/gistbin).**
 
 ## Using
 
@@ -65,6 +67,13 @@ octocat@octoserv:~$ cat git-author-rewrite.sh | gistbin -n "git-author-rewrite.s
 https://gist.githubusercontent.com/octocat/0831f3fbd83ac4d46451/raw/c197afe3e9ea2e4218f9fccbc0f36d2b8fd3c1e3/git-author-rewrite.sh
 ```
 
+If you are on a platform that does not support piping in to STDIN, you can instead give GistBin a path to a file with the `-f` or `--file` command. This works with a single file or multiple files, but will not work with the `--raw` flag. This is also the only way to get GistBin working on Windows.
+
+```
+octocat@octoserv:~$ gistbin -f singleBrick.scad singleBrick.stl # this is an ASCII STL, GistBin does not work with binary files.
+https://gist.github.com/chand1012/c8f4d8094d6e0b48c8e97e89a2530fad
+```
+
 You can also get the instructions for all of these commands with the help flag:
 
 ```
@@ -84,12 +93,9 @@ optional arguments:
                         can see.
   -r, --raw             Makes Gistbin return the raw URL instead of the HTML
                         URL of the file.
+  -f FILES [FILES ...], --file FILES [FILES ...]
+                        Gives Gistbin a list of files to upload. Also works
+                        with a single file.
 ```
 
 Gistbin doesn't just work with `cat` you can pipe any terminal output (that ends) into it! For example, if you wanted to list all the files in a directory, you could use `ls -1 | gistbin -n "filelist.txt"`. If you wanted to get all the logs from yesterday from the journal, you could run `journalctl --since yesterday | gistbin -n "yesterday-today-journal.log"`. The possibilities are endless!
-
-## Roadmap
-
-- Windows Support.
-- Multi-file uploads.
-- Some more stuff probably.
