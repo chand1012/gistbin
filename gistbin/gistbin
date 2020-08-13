@@ -9,14 +9,13 @@ from gistbin.lib import create_auth, create_gist, create_multi_gist
 if __name__=='__main__':
     # args stuff
     parser = argparse.ArgumentParser(description="A commandline tool for GitHub Gists.")
-    parser.add_argument('-n', '--name', action='store', help='Gives your gist a name. Input as a string. Default is random.')
-    parser.add_argument('-v', '--verbose', action='store_true', help='Enables verbose output.')
-    parser.add_argument('-d', '--desc', action='store', help='Gives your gist a description. Input as a string.')
-    parser.add_argument('--login', action='store_true', help='Login to GitHub Gists.')
-    parser.add_argument('-p', '--private', action='store_false', help='Sets your Gist to private so only those with the link can see.')
-    parser.add_argument('-r', '--raw', action='store_true', help='Makes Gistbin return the raw URL instead of the HTML URL of the file.')
-    parser.add_argument('-f', '--file', action='store', help='Gives Gistbin a file to upload.')
-    parser.add_argument('-fs', '--files', action='store', nargs='+', help='Gives Gistbin a list of files to upload.')
+    parser.add_argument('-n', '--name', action='store', help='Gives your gist a name. Input as a string. Default is random.', dest='name')
+    parser.add_argument('-v', '--verbose', action='store_true', help='Enables verbose output.', dest='verbose')
+    parser.add_argument('-d', '--desc', action='store', help='Gives your gist a description. Input as a string.', dest='desc')
+    parser.add_argument('--login', action='store_true', help='Login to GitHub Gists.', dest='login')
+    parser.add_argument('-p', '--private', action='store_false', help='Sets your Gist to private so only those with the link can see.', dest='private')
+    parser.add_argument('-r', '--raw', action='store_true', help='Makes Gistbin return the raw URL instead of the HTML URL of the file.', dest='raw')
+    parser.add_argument('-f', '--file', action='store', nargs='+', help='Gives Gistbin a list of files to upload. Also works with a single file.', dest='files')
     args = parser.parse_args()
 
     if args.login:
@@ -48,7 +47,7 @@ if __name__=='__main__':
                     filename = ntpath.basename(filename)
                 file_dict[filename] = {'content': f.read()}
         
-        create_multi_gist(file_dict, desc=args.desc, public=args.public, verbose=args.verbose)
+        create_multi_gist(file_dict, desc=args.desc, public=args.private, verbose=args.verbose)
 
     else:
         print("This platform does not support piping in text from stdin, so you must use a file. Use the '-f' or '--file' flag followed by a path to do this.")
