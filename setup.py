@@ -11,7 +11,7 @@ setuptools.setup(
     description='Github Gist client allowing for quick uploads via commandline.',
     long_description=long_desc,
     long_description_content_type="text/markdown",
-    url='https://github.com/chand1012/gistbin',
+    url='https://gistbin.chand1012.dev/',
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
