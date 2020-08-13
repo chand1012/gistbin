@@ -1,5 +1,7 @@
-import os
 import json
+import os
+import sys
+
 import requests
 from random_words import RandomWords
 
@@ -11,6 +13,10 @@ def safe_list_get(l, index):
         return None
 
 def create_auth(username, token):
+    user_home = os.environ.get("HOME")
+    if user_home is None or 'win32' in sys.platform:
+        user_home = os.environ.get("USERPROFILE")
+        
     keyfile_dir = os.path.join(os.environ.get("HOME"), ".gistbin")
     keyfile_path = os.path.join(keyfile_dir, 'auth.json')
     while True:
