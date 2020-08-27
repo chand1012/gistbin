@@ -29,7 +29,7 @@ def create_auth(username, token):
                 keyfile.write(json.dumps(data))
             break
         else:
-            os.mkdir(keyfile_dir)
+            os.makedirs(keyfile_dir)
 
 def get_auth():
     keyfile_dir = os.path.join(os.environ.get("HOME"), ".gistbin")
@@ -80,6 +80,8 @@ def create_gist(file_string, name=None, desc=None, public=True, verbose=False, r
     else:
         gist_id = response.get('id')
         print(f'https://gist.github.com/{username}/{gist_id}')
+    
+    session.close()
 
 
 def create_multi_gist(file_dict, desc=None, public=True, verbose=False):
@@ -115,3 +117,5 @@ def create_multi_gist(file_dict, desc=None, public=True, verbose=False):
     
     gist_id = response.get('id')
     print(f'https://gist.github.com/{username}/{gist_id}')
+
+    session.close()
