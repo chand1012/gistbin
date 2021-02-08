@@ -4,7 +4,7 @@ import argparse
 import ntpath
 import sys
 
-from gistbin.lib import create_auth, create_gist, create_multi_gist
+from gistbin.lib import create_auth, create_gist, create_multi_gist, get_file_metadata
 
 if __name__=='__main__':
     # args stuff
@@ -13,7 +13,7 @@ if __name__=='__main__':
     parser.add_argument('-v', '--verbose', action='store_true', help='Enables verbose output.', dest='verbose')
     parser.add_argument('-d', '--desc', action='store', help='Gives your gist a description. Input as a string.', dest='desc')
     parser.add_argument('--login', action='store_true', help='Login to GitHub Gists.', dest='login')
-    parser.add_argument('-p', '--private', action='store_false', help='Sets your Gist to private so only those with the link can see.', dest='private')
+    parser.add_argument('-p', '--public', action='store_true', help='Sets your Gist to public.', dest='public')
     parser.add_argument('-r', '--raw', action='store_true', help='Makes Gistbin return the raw URL instead of the HTML URL of the file.', dest='raw')
     parser.add_argument('-f', '--file', action='store', nargs='+', help='Gives Gistbin a list of files to upload. Also works with a single file.', dest='files')
     args = parser.parse_args()
@@ -23,12 +23,14 @@ if __name__=='__main__':
         key = input("Enter GitHub access token: ").rstrip()
         create_auth(username, key)
         print("Keyfile saved.")
-    elif ('linux' in sys.platform or 'darwin' in sys.platform) and args.file is None and args.files is None:
+    elif ('linux' in sys.platform or 'darwin' in sys.platform) and args.files is None:
         file_string = ''
         for line in sys.stdin:
             file_string += line 
         
-        create_gist(file_string, name=args.name, desc=args.desc, public=args.private, verbose=args.verbose, raw=args.raw)
+        name, desc, public = get_file_metadata(file_string, args.verbose)
+
+        create_gist(file_string, name=name or args.name, desc=desc or args.desc, public=public or args.public, verbose=args.verbose, raw=args.raw)
 
     elif args.file:
     
@@ -36,7 +38,9 @@ if __name__=='__main__':
         with open(args.file) as inFile:
             file_string = inFile.read()
         
-        create_gist(file_string, name=args.name, desc=args.desc, public=args.private, verbose=args.verbose, raw=args.raw)
+        name, desc, public = get_file_metadata(file_string, args.verbose)
+
+        create_gist(file_string, name=name or args.name, desc=desc or args.desc, public=public or args.public, verbose=args.verbose, raw=args.raw)
 
     elif args.files:
         file_dict = {}
@@ -47,7 +51,7 @@ if __name__=='__main__':
                     filename = ntpath.basename(filename)
                 file_dict[filename] = {'content': f.read()}
         
-        create_multi_gist(file_dict, desc=args.desc, public=args.private, verbose=args.verbose)
+        create_multi_gist(file_dict, desc=args.desc, public=args.public, verbose=args.verbose)
 
     else:
         print("This platform does not support piping in text from stdin, so you must use a file. Use the '-f' or '--file' flag followed by a path to do this.")

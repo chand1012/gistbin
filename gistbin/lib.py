@@ -17,7 +17,7 @@ def create_auth(username, token):
     if user_home is None or 'win32' in sys.platform:
         user_home = os.environ.get("USERPROFILE")
         
-    keyfile_dir = os.path.join(os.environ.get("HOME"), ".gistbin")
+    keyfile_dir = os.path.join(user_home, ".gistbin")
     keyfile_path = os.path.join(keyfile_dir, 'auth.json')
     while True:
         if os.path.exists(keyfile_dir):
@@ -32,7 +32,11 @@ def create_auth(username, token):
             os.makedirs(keyfile_dir)
 
 def get_auth():
-    keyfile_dir = os.path.join(os.environ.get("HOME"), ".gistbin")
+    user_home = os.environ.get("HOME")
+    if user_home is None or 'win32' in sys.platform:
+        user_home = os.environ.get("USERPROFILE")
+
+    keyfile_dir = os.path.join(user_home, ".gistbin")
     keyfile_path = os.path.join(keyfile_dir, 'auth.json')
     auth = {}
     with open(keyfile_path) as keyfile:
@@ -47,7 +51,7 @@ def create_gist(file_string, name=None, desc=None, public=True, verbose=False, r
         rw = RandomWords()
         name = '_'.join(rw.random_words(count=3)) + '.txt'
     if desc is None:
-        desc = ''
+        desc = 'Uploaded with Gistbin!'
 
     if verbose:
         print(name)
@@ -88,7 +92,7 @@ def create_multi_gist(file_dict, desc=None, public=True, verbose=False):
     url = 'https://api.github.com/gists'
 
     if desc is None:
-        desc = ''
+        desc = 'Uploaded with Gistbin!'
 
     if verbose:
         print(file_dict)
@@ -119,3 +123,33 @@ def create_multi_gist(file_dict, desc=None, public=True, verbose=False):
     print(f'https://gist.github.com/{username}/{gist_id}')
 
     session.close()
+
+def get_file_metadata(file_contents, verbose=False):
+    comment_delimiters = ['#', '//', '--', '<!--']
+    name = None
+    description = None
+    public = False
+    if type(file_contents) == str:
+        for line in file_contents.splitlines():
+            if any(line.startswith(x) for x in comment_delimiters):
+                if 'name:' in line:
+                    index = line.index('name:')
+                    name = line[index+5:].replace(' ', '')
+                    if '-->' in name:
+                        name = name.replace('-->', '')
+                if 'desc:' in line:
+                    index = line.index('desc:')
+                    description = line[index+5:]
+                    if '-->' in description:
+                        description = description.replace('-->', '')
+                if 'public:' in line:
+                    if 'true' in line.lower():
+                        public = True
+
+    if verbose:
+        print('Gotten metadata:')
+        print(f'Name: {name}')
+        print(f'Description: {description}')
+        print(f'Public: {public}')
+                
+    return name, description, public

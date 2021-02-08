@@ -51,11 +51,59 @@ octocat@octoserv:~$ cat test.cs | gistbin -n "test.cs"
 https://gist.github.com/octocat/1305321
 ```
 
-If you don't want others to see your gist, and you just want it for your eyes only, you can pass `--private` or `-p`.
+Another option is by adding file metadata. Here is an example:
+
+```Python
+# name: test.py
+# desc: this is a test
+# public: true
+
+print("Hello world!")
+```
+
+```bash
+octocat@octoserv:~$ cat test.py | gistbin
+https://gist.github.com/chand1012/4d47f84d9c7b61c99ea9d310e92c7a17
+```
+
+Here are a few more examples of metadata in files:
+
+```javascript
+// name: test.js
+// desc: This is a test
+// public: false
+
+console.log("Hello world!");
+```
+
+```C++
+#include <iostream>
+
+// name: test.cpp
+// desc: Hello World in C++
+// public: true
+
+int main() {
+  std::cout << "Hello world!" << std::endl;
+  return 0;
+}
+```
+
+```lua
+-- name: test.lua
+-- desc: test program
+-- public: false
+
+print("test")
+```
+
+
+If you want to make your gists public, just pass the `-p` or `--public` flag.
 
 ```
-octocat@octoserv:~$ cat private.txt | gistbin -n "private.txt" -p
-https://gist.github.com/octocat/thisissecret
+octocat@octoserv:~$ cat requirements.txt | gistbin -p -n "requirements.txt" -d "Gistbin requirements"
+https://gist.github.com/chand1012/75b92e8a17906a0f7f7b330154fccbc2
+
 ```
 
 If you want to get the raw url for the uploaded file, such as if you want to then download the file immediately onto another machine, you can pass the `-r` or `--raw` argument.
@@ -76,24 +124,20 @@ You can also get the instructions for all of these commands with the help flag:
 
 ```
 octocat@octoserv:~$ gistbin -h
-usage: gistbin [-h] [-n NAME] [-v] [-d DESC] [--login] [-p] [-r]
+usage: gistbin [-h] [-n NAME] [-v] [-d DESC] [--login] [-p] [-r] [-f FILES [FILES ...]]
 
 A commandline tool for GitHub Gists.
 
 optional arguments:
   -h, --help            show this help message and exit
-  -n NAME, --name NAME  Gives your gist a name. Input as a string. Default is
-                        random.
+  -n NAME, --name NAME  Gives your gist a name. Input as a string. Default is random.
   -v, --verbose         Enables verbose output.
   -d DESC, --desc DESC  Gives your gist a description. Input as a string.
   --login               Login to GitHub Gists.
-  -p, --private         Sets your Gist to private so only those with the link
-                        can see.
-  -r, --raw             Makes Gistbin return the raw URL instead of the HTML
-                        URL of the file.
+  -p, --public          Sets your Gist to public.
+  -r, --raw             Makes Gistbin return the raw URL instead of the HTML URL of the file.
   -f FILES [FILES ...], --file FILES [FILES ...]
-                        Gives Gistbin a list of files to upload. Also works
-                        with a single file.
+                        Gives Gistbin a list of files to upload. Also works with a single file.
 ```
 
 Gistbin doesn't just work with `cat` you can pipe any terminal output (that ends) into it! For example, if you wanted to list all the files in a directory, you could use `ls -1 | gistbin -n "filelist.txt"`. If you wanted to get all the logs from yesterday from the journal, you could run `journalctl --since yesterday | gistbin -n "yesterday-today-journal.log"`. The possibilities are endless!
